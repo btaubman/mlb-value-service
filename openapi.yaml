@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: MLB Player Value Table Service
+  version: 0.1
+servers:
+  - url: https://YOUR_HOSTNAME
+paths:
+  /player_value_table:
+    post:
+      operationId: getPlayerValueTable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [player_name, start_year, end_year]
+              properties:
+                player_name: { type: string }
+                start_year: { type: integer }
+                end_year: { type: integer }
+                prefer_team: { type: string, nullable: true }
+                prefer_position: { type: string, nullable: true }
+                base_year: { type: integer, default: 2013 }
+                base_value_m: { type: number, default: 7.0 }
+                annual_growth: { type: number, default: 0.05 }
+      responses:
+        "200":
+          description: Value table rows + totals + warnings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player: { type: object }
+                  params: { type: object }
+                  rows:
+                    type: array
+                    items: { type: object }
+                  totals: { type: object }
+                  warnings:
+                    type: array
+                    items: { type: string }
